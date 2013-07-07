@@ -8,12 +8,10 @@ class User < ActiveRecord::Base
   has_many :skills, through: :skill_users
 
   def proficiency_for(skill)
-    skill_user = self.skill_users.where(skill_id: skill.id).first
-    skill_user.blank? ? 0 : skill_user.proficiency
+    self.skill_users.find_by_skill_id(skill.id).proficiency rescue 0
   end
 
   def set_proficiency_for(skill,level)
-    skill_user = self.skill_users.where(skill_id: skill.id).first
-    skill_user.update_attributes(proficiency: level)
+    self.skill_users.find_by_skill_id(skill.id).update_attributes(proficiency: level) rescue nil
   end
 end
